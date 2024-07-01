@@ -1,7 +1,6 @@
 ﻿using Asn.FileProcessor.Data;
 using ASN.Infrastructure.Data;
 using ASN.Infrastructure.Data.Models;
-using System.Text.RegularExpressions;
 
 namespace Asn.FileProcessor
 {
@@ -11,147 +10,13 @@ namespace Asn.FileProcessor
 
         public void Process(string filePath)
         {
-            long fileLocationIndex = 0;
+            //If we have more then one file type/structure this is the place we would add more logic to process the files differently
+            IEnumerable<Box> boxIterator = new BoxFileIterator(filePath);
 
-            bool isEndOfFile = false;
-            while (!isEndOfFile)
+            foreach (Box box in boxIterator)
             {
-                var acknowledgementShippingNotification = GetOneBoxEntry(filePath, ref fileLocationIndex);
-
-                if (acknowledgementShippingNotification != null)
-                {
-                    ProcessChunk(acknowledgementShippingNotification);
-                }
-
-                if (fileLocationIndex == -1 || acknowledgementShippingNotification == null)
-                {
-                    isEndOfFile = true;
-                }
-            }
-        }
-
-        private Box GetOneBoxEntry(string filePath, ref long index)
-        {
-            Box? box = null;
-
-            using (FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                fs.Position = index;
-
-                using (StreamReader reader = new(fs))
-                {
-                    box = CreateBoxFromHeader(reader, ref index);
-
-                    if (box == null)
-                    {
-                        throw new Exception("Box header not found");
-                    }
-
-                    AddAllBoxContent(box, reader, ref index);
-
-                    if (box.Contents.Count == 0)
-                    {
-                        throw new Exception("Box content not found");
-                    }
-                   
-                    fs.Close();
-                    return box;
-                }
-            }
-        }
-
-        private void AddAllBoxContent(Box? box, StreamReader reader, ref long index)
-        {
-            bool nextBoxFound = false;
-            while (!nextBoxFound)
-            {
-                var contentLine = reader.ReadLine();
-
-                if (contentLine == string.Empty)
-                {
-                    index = AddEmptyLineLenght(index);
-                    continue;
-                }
-
-                if (contentLine == null)
-                {
-                    index = -1;
-                    return;
-                }
-
-                if (contentLine.Contains("HDR"))
-                {
-                    nextBoxFound = true;
-                    continue;
-                }
-                else
-                {
-                    index = GetCurrentStreamLocationIndex(index, contentLine);
-                    string[] operands = Regex.Split(contentLine.Trim(), @"\s+");
-
-                    if (operands.Length == 4)
-                    {
-                        //ToDO - Add more validation here to verify that the values are correct
-                        box.Contents.Add(new()
-                        {
-                            PoNumber = operands[1],
-                            Isbn = operands[2],
-                            Quantity = int.Parse(operands[3])
-                        });
-                    }
-                    else
-                    {
-                        throw new Exception($"Invalid Content Line: {contentLine}");
-                    }
-                }
-            }
-        }
-
-        private static long AddEmptyLineLenght(long index)
-        {
-            return index + 1;
-        }
-
-        private static long GetCurrentStreamLocationIndex(long index, string line)
-        {
-            var newLineCharCount = 1;
-            return index + line.Length + newLineCharCount;
-        }
-
-        private Box? CreateBoxFromHeader(StreamReader reader, ref long index)
-        {
-            Box? box = null;
-
-            string? header = reader.ReadLine();
-
-            if (header == null)
-            {
-                return null;
-            }
-
-            index = GetCurrentStreamLocationIndex(index, header);
-
-            if (header.Contains("HDR"))
-            {
-                string[] operands = Regex.Split(header.Trim(), @"\s+");
-
-                //ToDO - Add more validation here to verify that the values are correct
-                if (operands.Length == 3)
-                {
-                    box = new()
-                    {
-                        SupplierIdentifier = operands[1],
-                        Identifier = operands[2],
-                        Contents = new List<Content>()
-                    };
-                }
-            }
-            else
-            {
-                throw new Exception($"Invalid box Header: {header}");
-            }
-
-            return box;
+                ProcessChunk(box);
+            }           
         }
 
         private void ProcessChunk(Box box)
@@ -175,7 +40,6 @@ namespace Asn.FileProcessor
             }));
 
             _unitOfWork.Save();
-
         }
     }
 }
