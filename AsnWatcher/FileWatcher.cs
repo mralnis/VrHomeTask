@@ -44,6 +44,8 @@ namespace AsnWatcher
         {
             var fullPath = e.FullPath;
             WaitForFile(fullPath);
+
+            //ToDo - Unit of work should be created per file
             new FileProcessor(_unitOfWork).Process(fullPath);
         }
 

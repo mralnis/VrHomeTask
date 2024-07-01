@@ -9,15 +9,14 @@ builder.Services.AddDatabase(builder.Configuration);
 
 var host = builder.Build();
 
-await host.SetupHockeyPoolDBAsync();
+await host.SetupDBAsync();
 
 using var fileWatcher =  StartWatchingForIncomingFiles(host.Services);
 
 host.Run();
 
-//As in the task there was requirement for only one path to monitor I have used the same path for all the suppliers.
+//As in the task there was requirement for only one path to be monitored I have used the same path for all the suppliers.
 //If we would have to use different paths for different suppliers this should be created as some factory class which will create the FileWatcher for each supplier.
-//That would also allow as well process different supplier files in different ways.
 FileWatcher StartWatchingForIncomingFiles(IServiceProvider serviceProvider)
 {
     var scope = serviceProvider.CreateScope(); 

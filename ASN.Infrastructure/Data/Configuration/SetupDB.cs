@@ -30,7 +30,7 @@ namespace ASN.Infrastructure.Data.Configuration
             return services;
         }
 
-        public static async Task<IServiceScope> SetupHockeyPoolDBAsync(this IHost app)
+        public static async Task<IServiceScope> SetupDBAsync(this IHost app)
         {
             var scope = app.Services.CreateScope();
             {
