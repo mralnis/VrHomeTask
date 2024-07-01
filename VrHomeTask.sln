@@ -9,10 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASN.Infrastructure", "ASN.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asn.FileProcessor", "Asn.FileProcessor\Asn.FileProcessor.csproj", "{F598700D-B87C-41BC-A366-8FF4BA99A5FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TaskItems", "TaskItems", "{A433BE2E-FDE2-4756-9457-9E67FCD537AA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1CD5079C-8D4A-46AF-AA10-8FED67B35E4C}"
 	ProjectSection(SolutionItems) = preProject
-		D:\Users\didzi\Desktop\data.txt = D:\Users\didzi\Desktop\data.txt
-		D:\Users\didzi\Desktop\README.md = D:\Users\didzi\Desktop\README.md
+		data.txt = data.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
