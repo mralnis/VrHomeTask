@@ -11,8 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asn.FileProcessor", "Asn.Fi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TaskItems", "TaskItems", "{A433BE2E-FDE2-4756-9457-9E67FCD537AA}"
 	ProjectSection(SolutionItems) = preProject
-		Asn.FileProcessor\data.txt = Asn.FileProcessor\data.txt
-		Asn.FileProcessor\README.md = Asn.FileProcessor\README.md
+		D:\Users\didzi\Desktop\data.txt = D:\Users\didzi\Desktop\data.txt
+		D:\Users\didzi\Desktop\README.md = D:\Users\didzi\Desktop\README.md
 	EndProjectSection
 EndProject
 Global
