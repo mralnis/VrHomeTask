@@ -15,11 +15,11 @@ namespace Asn.FileProcessor
 
             foreach (Box box in boxIterator)
             {
-                ProcessChunk(box);
+                ProcessBox(box);
             }           
         }
 
-        private void ProcessChunk(Box box)
+        private void ProcessBox(Box box)
         {
             //ToDo - Send to some tasker or queue or at minimum create multiple processes to run this in parallel
             var boxHeader = new BoxHeader()
