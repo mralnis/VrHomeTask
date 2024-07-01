@@ -53,7 +53,7 @@ namespace Asn.FileProcessor
                     {
                         throw new Exception("Box content not found");
                     }
-
+                   
                     fs.Close();
                     return box;
                 }
@@ -69,7 +69,7 @@ namespace Asn.FileProcessor
 
                 if (contentLine == string.Empty)
                 {
-                    AddEmptyLineLenght(ref index);
+                    index = AddEmptyLineLenght(index);
                     continue;
                 }
 
@@ -86,7 +86,7 @@ namespace Asn.FileProcessor
                 }
                 else
                 {
-                    index = GetCurrnetStreamLocationIndex(index, contentLine);
+                    index = GetCurrentStreamLocationIndex(index, contentLine);
                     string[] operands = Regex.Split(contentLine.Trim(), @"\s+");
 
                     if (operands.Length == 4)
@@ -107,12 +107,12 @@ namespace Asn.FileProcessor
             }
         }
 
-        private static long AddEmptyLineLenght(ref long index)
+        private static long AddEmptyLineLenght(long index)
         {
             return index + 1;
         }
 
-        private static long GetCurrnetStreamLocationIndex(long index, string line)
+        private static long GetCurrentStreamLocationIndex(long index, string line)
         {
             var newLineCharCount = 1;
             return index + line.Length + newLineCharCount;
@@ -124,12 +124,12 @@ namespace Asn.FileProcessor
 
             string? header = reader.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(header))
+            if (header == null)
             {
                 return null;
             }
 
-            index = GetCurrnetStreamLocationIndex(index, header);
+            index = GetCurrentStreamLocationIndex(index, header);
 
             if (header.Contains("HDR"))
             {
